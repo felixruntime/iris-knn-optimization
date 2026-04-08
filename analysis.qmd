@@ -1,7 +1,45 @@
 ---
-title: "iris knn optimization"
+title: "Iris KNN Optimization"
+date: "2026-04-08"
+format:
+    html:
+        code-fold: false
+
 ---
 
-## Quarto
+## Introduction
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+![Figure 1 Iris virginica, versicolor, and setosa.](./img/iris_species.jpeg)
+
+> "if we are to learn anything about the ultimate nature of species we must reduce the problem to the simplest terms and study a few easily recognized, well differentiated species” - Edgar Anderson
+
+The Iris dataset is far more than just a beginner's exercise; it is the "time capsule" that bridged classical 1936 statistics with the modern era of Machine Learning. Created by Ronald Fisher in an age of manual calculations, it found new life in the 1980s as a founding member of the UCI Repository, becoming the first universal yardstick for comparing algorithms back when computational power was still a luxury.
+
+forcing the data scientist to realize that the mathematical distance between points is what defines reality. With only 150 samples, it has survived the decades by occupying a rare "sweet spot": it is simple enough not to intimidate, yet possesses a subtle overlap between species that punishes carelessness. For k-Nearest Neighbors (kNN), Iris is the mentor, forcing the data scientist to realize that the mathematical distance between points is what defines reality.
+
+## Environment Setup
+
+This project uses `renv` for reproducibility. To restore the exact package versions, run this command on your R console after cloning this repository:
+
+```r
+renv::restore()
+```
+
+We are going to use three main packages:
+
+1. `tidyverse`, for data manipulation
+2. `GGally`, for correlation/pairs plot that shows all 4 variables at once
+3. `knitr`, for formatted tables nicely in the rendered HTML
+
+```{r}
+#| message: false
+#| warning: false
+library(tidyverse)
+library(GGally)
+library(knitr)
+```
+
+## Exploratory Data Analysis
+## Data Preparation for KNN
+## KNN Classification
+## Conclusion
