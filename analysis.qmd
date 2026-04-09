@@ -92,7 +92,119 @@ Since we have no na/NaN, moving forward to the next step.
 
 ### Descriptive Statistics
 
-Now we should have 
+#### Mean
+
+The primary purpose of descriptive statistics is to summarize and organize the characteristics of a dataset so it’s easy to understand. Instead of looking at 150 rows of raw data, these metrics give you a "snapshot" of the typical values and the diversity within the data.
+
+Using the Iris Dataset, let’s break down these core concepts.
+
+$$\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i$$
+
+```{r}
+iris %>%
+  group_by(Species) %>%
+  summarise(
+    mean_sepal_length = mean(Sepal.Length),
+    mean_sepal_width = mean(Sepal.Width),
+    mean_petal_length = mean(Petal.Length),
+    mean_petal_width = mean(Petal.Width)
+  ) %>%
+    kable()
+```
+
+A quick analysis shows that setosa `Petal.Length` has a large gap between the other species, and **Isolation** works in favor of classification.
+
+
+#### Median
+
+If you line up all 150 flowers from the shortest sepal to the longest, the median is the value exactly in the middle (the 75th and 76th values).
+
+Why it matters: Unlike the mean, the median isn't "pulled" by extreme outliers (like one giant 20 cm flower).
+If the mean and median are close, your data is likely symmetrical.
+
+
+```{r}
+iris %>%
+  group_by(Species) %>%
+  summarise(
+    median_sepal_length = median(Sepal.Length),
+    median_sepal_width = median(Sepal.Width),
+    median_petal_length = median(Petal.Length),
+    median_petal_width = median(Petal.Width)
+  ) %>%
+    kable()
+```
+
+The mean and median values are close for all species, suggesting that the Iris dataset has normal distributions.
+
+#### Standard Deviation
+
+This measures how far each number in the set is from the mean. Mathematically, it’s the average of the squared differences from the Mean
+
+$$s = \sqrt{\frac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar{x})^2}$$
+
+```{r}
+iris %>%
+  group_by(Species) %>%
+  summarise(
+    sd_sepal_length = sd(Sepal.Length),
+    sd_sepal_width = sd(Sepal.Width),
+    sd_petal_length = sd(Petal.Length),
+    sd_petal_width = sd(Petal.Width)
+  ) %>%
+    kable()
+```
+
+
+Setosa petal length is more consistent — measurements cluster tightly around the mean. Virginica shows more variability — individual flowers differ more from the average.
+
+KNN is a proximity algorithm. It assumes that similar things (low variance/SD) stay close together. It uses the **mean** to find the center of a group and the **standard deviation** to understand how wide that group's territory is.
+
+
+#### Measures of Range
+
+
+##### Minimum and Maximum
+
+`min` The smallest value recorded.
+`max` The largest value recorded.
+
+```{r}
+iris %>%
+  group_by(Species) %>%
+  summarise(
+    min_sepal_length = min(Sepal.Length),
+    max_sepal_length = max(Sepal.Length),
+    min_petal_length = min(Petal.Length),
+    max_petal_length = max(Petal.Length),
+    min_sepal_width = min(Sepal.Width),
+    max_petal_width = max(Sepal.Width),
+    min_petal_length = min(Petal.Width),
+    max_petal_length = max(Petal.Length)
+
+  ) %>%
+  kable()
+```
+
+
+
+
+
+
+```{r}
+iris %>%
+  group_by(Species) %>%
+  summarise(
+    max_sepal_length = max(Sepal.Length),
+    max_sepal_width = max(Sepal.Width),
+    max_petal_length = max(Petal.Length),
+    max_petal_width = max(Petal.Width)
+  ) %>%
+    kable()
+```
+
+
+There is a gap of 1.1 cm — meaning no setosa flower has a petal length above 1.9, and no versicolor flower has a petal length below 3.0.
 
 
 ## Data Preparation for KNN
