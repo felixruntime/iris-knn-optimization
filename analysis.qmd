@@ -163,33 +163,26 @@ KNN is a proximity algorithm. It assumes that similar things (low variance/SD) s
 
 #### Measures of Range
 
+##### Minimum
 
-##### Minimum and Maximum
-
-`min` The smallest value recorded.
-`max` The largest value recorded.
+The smallest value recorded.
 
 ```{r}
 iris %>%
   group_by(Species) %>%
   summarise(
     min_sepal_length = min(Sepal.Length),
-    max_sepal_length = max(Sepal.Length),
-    min_petal_length = min(Petal.Length),
-    max_petal_length = max(Petal.Length),
     min_sepal_width = min(Sepal.Width),
-    max_petal_width = max(Sepal.Width),
-    min_petal_length = min(Petal.Width),
-    max_petal_length = max(Petal.Length)
-
+    min_petal_length = min(Petal.Length),
+    min_petal_width = min(Petal.Width)
   ) %>%
-  kable()
+    kable()
 ```
 
 
+##### Maximum
 
-
-
+The largest value recorded.
 
 ```{r}
 iris %>%
@@ -205,6 +198,7 @@ iris %>%
 
 
 There is a gap of 1.1 cm — meaning no setosa flower has a petal length above 1.9, and no versicolor flower has a petal length below 3.0.
+
 
 
 ## Data Preparation for KNN
