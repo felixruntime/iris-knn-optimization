@@ -220,7 +220,3 @@ iris %>%
 ```
 
 Therefore, these outliers should not be removed before training KNN because they represent natural, albeit rare, biological variations of a highly consistent species, and removing them would artificially oversimplify the model's understanding of the data's real-world complexity.
-
-## Data Preparation for KNN
-## KNN Classification
-## Conclusion
