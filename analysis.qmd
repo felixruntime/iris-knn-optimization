@@ -9,10 +9,10 @@ format:
 
 ## Introduction
 
-![Figure 1 Iris virginica, versicolor, and setosa.](./img/iris_species.jpeg)
+![Iris virginica, versicolor, and setosa.](./img/iris_species.jpeg)
 
 > "if we are to learn anything about the ultimate nature of species we must reduce the problem to the simplest terms and study a few easily recognized, well differentiated species” - Edgar Anderson
-
+`
 The Iris dataset is far more than just a beginner's exercise; it is the "time capsule" that bridged classical 1936 statistics with the modern era of Machine Learning. Created by Ronald Fisher in an age of manual calculations, it found new life in the 1980s as a founding member of the UCI Repository, becoming the first universal yardstick for comparing algorithms back when computational power was still a luxury.
 
 forcing the data scientist to realize that the mathematical distance between points is what defines reality. With only 150 samples, it has survived the decades by occupying a rare "sweet spot": it is simple enough not to intimidate, yet possesses a subtle overlap between species that punishes carelessness. For k-Nearest Neighbors (kNN), Iris is the mentor, forcing the data scientist to realize that the mathematical distance between points is what defines reality.
