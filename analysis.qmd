@@ -199,7 +199,27 @@ iris %>%
 
 There is a gap of 1.1 cm — meaning no setosa flower has a petal length above 1.9, and no versicolor flower has a petal length below 3.0.
 
+## Visualizing Outliers
 
+As k-Nearest Neighbors (kNN) is a distance-based algorithm, outliers can significantly warp the classification boundaries. A single extreme value can "pull" the nearest neighbor calculation toward the wrong class.
+
+We will use Boxplots to visualize the distribution and identify any points that fall outside the interquartile range (IQR).
+
+```{r}
+iris %>%
+  pivot_longer(cols = -Species, names_to = "Feature", values_to = "Value") %>%
+  ggplot(aes(x = Species, y = Value, fill = Species)) +
+  geom_boxplot(outlier.colour = "red", outlier.shape = 16) +
+  facet_wrap(~Feature, scales = "free_y") +
+  theme_minimal() +
+  labs(
+    title = "Outlier Detection by Species",
+    x = "Species",
+    y = "Measurement (cm)"
+  )
+```
+
+Therefore, these outliers should not be removed before training KNN because they represent natural, albeit rare, biological variations of a highly consistent species, and removing them would artificially oversimplify the model's understanding of the data's real-world complexity.
 
 ## Data Preparation for KNN
 ## KNN Classification
