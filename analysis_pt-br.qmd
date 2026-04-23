@@ -2,20 +2,7 @@
 title: "Otimização de KNN para o Dataset Iris"
 date: "2026-04-16"
 authors:
-  - name: "Vinicius Felix"
-    affiliation: "569841"
-  - name: "Vitor Vitorino"
-    affiliation: "570475"
-  - name: "Arthur Lins"
-    affiliation: "570110"
-  - name: "Arthur Lins"
-    affiliation: "570110"
-  - name: "Silvio Neto"
-    affiliation: "572632"
-  - name: "Thaina Santos"
-    affiliation: "569110"
-    
-
+  - name: "FelixRuntime"
 format:
     html:
         code-fold: false
