@@ -1,0 +1,299 @@
+---
+title: "Checkpoint 2 - Análise Exploratória Dataset Iris"
+subtitle: "Diagnóstico para Modelagem com kNN"
+date: "2026-04-16"
+lang: pt-br
+authors:
+  - name: "Vinicius Felix"
+    affiliation: "FIAP - RM 569841"
+  - name: "Vitor Vitorino"
+    affiliation: "FIAP - RM 570475"
+  - name: "Arthur Lins"
+    affiliation: "FIAP - RM 570110"
+  - name: "Silvio Neto"
+    affiliation: "FIAP - RM 572632"
+  - name: "Thaina Santos"
+    affiliation: "FIAP - RM 569110"
+
+format:
+    html:
+        code-fold: false
+    pdf:
+        toc: true
+        number-sections: true
+        documentclass: article
+        papersize: letter
+---
+
+
+## Introdução
+
+![Iris virginica, versicolor e setosa.](./img/iris_species.jpeg)
+
+> "Se quisermos aprender algo sobre a natureza última das espécies, devemos reduzir o problema aos termos mais simples e estudar algumas espécies facilmente reconhecidas e bem diferenciadas" - Edgar Anderson
+
+O conjunto de dados Iris é muito mais do que apenas um exercício para iniciantes, é a "cápsula do tempo" que uniu a estatística clássica de 1936 com a era moderna do Aprendizado de Máquina. Criado por Ronald Fisher em uma época de cálculos manuais, ele ganhou nova vida na década de 1980 como membro fundador do Repositório UCI, tornando-se a primeira régua universal para comparar algoritmos quando o poder computacional ainda era um luxo.
+
+Com apenas 150 amostras, ele sobreviveu às décadas ao ocupar um "ponto ideal" raro: é simples o suficiente para não intimidar, mas possui uma sobreposição sutil entre as espécies que pune o descuido. Para o k-Vizinhos Mais Próximos (kNN), o Iris é o mentor que força o cientista de dados a perceber que a distância matemática entre os pontos é o que define a realidade.
+
+## Configuração do Ambiente
+
+Este projeto utiliza o `renv` para reprodutibilidade. Para restaurar as versões exatas dos pacotes, execute este comando no seu console do R após clonar este repositório:
+
+```{r}
+renv::restore()
+```
+
+Utilizaremos três pacotes principais:
+
+  tidyverse, para manipulação de dados
+
+  Gally, para gráficos de correlação/pares que mostram as 4 variáveis simultaneamente
+
+  knitr, para formatar tabelas de forma elegante no HTML gerado
+
+```{r}
+#| message: false
+#| warning: false
+library(tidyverse)
+library(GGally)
+library(knitr)
+```
+
+## Análise Exploratória de Dados
+
+### Primeiras Impressões
+
+Vamos verificar a diferença entre estas duas funções populares para iniciar uma análise de dados.
+
+```{r}
+glimpse(iris)
+```
+
+Como podemos observar, o glimpse() fornece uma visão bem formatada e organizada para conjuntos de dados, exibida de forma horizontal, incluindo:
+
+  Número de Linhas
+
+  Número de Colunas
+
+  Nomes das colunas
+
+  Tipo de dado de cada coluna
+
+    dbl — double, valores numéricos decimais
+
+    fct — factor, variável categórica com níveis definidos
+
+Como podemos ver, ele é projetado para mostrar a estrutura, não todos os valores, portanto não é a ferramenta ideal para visualizar todos os valores únicos.
+
+Vamos conferir como o `summary()` difere da função anterior.
+
+```{r}
+summary(iris)
+```
+
+Ele fornece uma visão geral estatística rápida de um determinado conjunto de dados ou vetor. Quando aplicado a dados numéricos, retorna as seguintes estatísticas resumidas principais:
+
+    Min: O valor mínimo nos dados
+
+    1st Qu: O primeiro quartil (percentil 25)
+
+    Median: O valor central (percentil 50)
+
+    3rd Qu: O terceiro quartil (percentil 75)
+
+    Max: O valor máximo nos dados
+
+
+## Limpeza e Qualidade dos Dados
+
+A limpeza vem antes da estatística; ao tratar as inconsistências primeiro, garantimos que a média, variância e desvio padrão calculados reflitam fielmente a verdadeira natureza da população.
+
+Vamos começar verificando na/NaN em nossos dados. Se os encontrarmos, eles podem ter dois significados: dados ausentes ou não aplicável.
+
+Se forem Dados Ausentes: Geralmente você faz a imputação (preenche com a média/mediana) ou remove a linha se a perda for mínima.
+
+Se for Não Aplicável: Frequentemente você faz a codificação (ex: substitui NaN por 0 ou uma categoria como "Nenhum") para que o modelo entenda que a ausência é uma informação em si.
+    
+```{r}
+colSums(is.na(iris))
+```
+
+## Estatística Descritiva
+
+### Média
+
+O objetivo principal da estatística descritiva é resumir e organizar as características de um conjunto de dados para que ele seja fácil de entender. Em vez de olhar para 150 linhas de dados brutos, estas métricas oferecem um "panorama" dos valores típicos e da diversidade dentro dos dados.
+
+Utilizando o Dataset Iris, vamos detalhar estes conceitos fundamentais.
+
+$$\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i$$
+
+```{r}
+iris %>%
+  group_by(Species) %>%
+  summarise(
+    mean_sepal_length = mean(Sepal.Length),
+    mean_sepal_width = mean(Sepal.Width),
+    mean_petal_length = mean(Petal.Length),
+    mean_petal_width = mean(Petal.Width)
+  ) %>%
+    kable()
+```
+
+A análise mostra que o Petal.Length da setosa possui uma grande lacuna em relação às outras espécies, e o Isolamento trabalha a favor da classificação.
+
+### Mediana
+
+Se você enfileirar todas as 150 flores, da sépala mais curta para a mais longa, a mediana é o valor exatamente no meio (os valores 75 e 76).
+
+Por que isso importa: Ao contrário da média, a mediana não é "puxada" por valores extremos (como uma única flor gigante de 20 cm). Se a média e a mediana estiverem próximas, é provável que seus dados sejam simétricos.
+
+```{r}
+iris %>%
+  group_by(Species) %>%
+  summarise(
+    median_sepal_length = median(Sepal.Length),
+    median_sepal_width = median(Sepal.Width),
+    median_petal_length = median(Petal.Length),
+    median_petal_width = median(Petal.Width)
+  ) %>%
+    kable()
+```
+
+Os valores da média e da mediana estão próximos para todas as espécies, sugerindo que o conjunto de dados Iris possui distribuições normais.
+
+### Desvio Padrão
+
+Mede o quão longe cada número no conjunto está da média. Matematicamente, é a média das diferenças quadradas em relação à Média.
+
+$$s = \sqrt{\frac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar{x})^2}$$
+
+```{r}
+iris %>%
+  group_by(Species) %>%
+  summarise(
+    sd_sepal_length = sd(Sepal.Length),
+    sd_sepal_width = sd(Sepal.Width),
+    sd_petal_length = sd(Petal.Length),
+    sd_petal_width = sd(Petal.Width)
+  ) %>%
+    kable()
+```
+
+### Medidas de Amplitude
+
+#### Mínimo
+
+O menor valor registrado.
+```{r}
+iris %>%
+  group_by(Species) %>%
+  summarise(
+    min_sepal_length = min(Sepal.Length),
+    min_sepal_width = min(Sepal.Width),
+    min_petal_length = min(Petal.Length),
+    min_petal_width = min(Petal.Width)
+  ) %>%
+    kable()
+```
+
+#### Máximo
+
+O maior valor registrado.
+```{r}
+iris %>%
+  group_by(Species) %>%
+  summarise(
+    max_sepal_length = max(Sepal.Length),
+    max_sepal_width = max(Sepal.Width),
+    max_petal_length = max(Petal.Length),
+    max_petal_width = max(Petal.Width)
+  ) %>%
+    kable()
+```
+
+Existe uma lacuna de 1,1 cm — significando que nenhuma flor setosa tem comprimento de pétala acima de 1,9, e nenhuma flor versicolor tem comprimento de pétala abaixo de 3,0.
+
+## Visualizando Outliers
+
+Como o k-Vizinhos Mais Próximos (kNN) é um algoritmo baseado em distância, os outliers podem distorcer significativamente as fronteiras de classificação. Um único valor extremo pode "puxar" o cálculo do vizinho mais próximo para a classe errada.
+
+Utilizaremos Boxplots para visualizar a distribuição e identificar quaisquer pontos que estejam fora do intervalo interquartil (IQR).
+
+```{r}
+iris %>%
+  pivot_longer(
+    cols = -Species, 
+    names_to = "Feature", 
+    values_to = "Value"
+  ) %>%
+  ggplot(aes(x = Species, y = Value, fill = Species)) +
+  geom_boxplot(outlier.colour = "red", outlier.shape = 16) +
+  facet_wrap(~Feature, scales = "free_y") +
+  theme_minimal() +
+  labs(
+    title = "Detecção de Outliers por Espécie",
+    x = "Espécie",
+    y = "Medida (cm)"
+  )
+```
+
+Portanto, estes outliers não devem ser removidos antes do treinamento do KNN porque representam variações biológicas naturais, embora raras, de uma espécie altamente consistente, e removê-los simplificaria artificialmente a compreensão do modelo sobre a complexidade real dos dados.
+
+## Conlusao
+
+A análise exploratória demonstra que o dataset Iris possui características ideais para o algoritmo kNN, mas exige atenção à estrutura das suas variáveis. A espécie Setosa apresenta uma separabilidade clara, garantindo alta precisão devido à sua distância em relação às demais. Já a sobreposição entre Versicolor e Virginica torna o modelo dependente de um ajuste rigoroso do hiperparâmetro k, uma vez que a fronteira de decisão será definida pela densidade local de pontos onde as médias das espécies se aproximam.
+
+Para assegurar a eficácia do modelo, é necessária a aplicação de normalização (escala) nas features, garantindo que variáveis de maior magnitude não distorçam os cálculos de proximidade. Embora a baixa variância observada favoreça a consistência do kNN, a presença de outliers na largura da sépala reforça a necessidade de um modelo robusto, capaz de ignorar ruídos pontuais para manter uma boa generalização sobre a complexidade biológica real dos dados.
+
+
+Importando scikitlearn
+
+```{r}
+#| label: setup-python
+#| include: false
+
+library(reticulate)
+
+# Força o caminho do executável do seu venv estável
+# Certifique-se de que a pasta se chama 'venv' e não 'vend'
+path_to_python <- "./venv/bin/python3.12"
+
+if (file.exists(path_to_python)) {
+  use_python(path_to_python, required = TRUE)
+}
+
+# Esse comando deve retornar a versão 3.12 ou 3.13
+py_config()
+```
+
+
+## KNN em Python
+
+```{python}
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot
+import seaborn as sns
+
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+df = sns.load_dataset("iris")
+print(df)
+
+```
+
+Normalizar os dados
+
+```{python}
+X = df.drop(columns="species")
+y = df["species"]
+print(X)
+print(y)
+```
