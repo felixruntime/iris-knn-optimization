@@ -5,15 +5,18 @@ date: "2026-04-16"
 lang: pt-br
 authors:
   - name: "Vinicius Felix"
-    affiliation: "FIAP - RM 569841"
+    affiliation: "569841"
   - name: "Vitor Vitorino"
-    affiliation: "FIAP - RM 570475"
+    affiliation: "570475"
   - name: "Arthur Lins"
-    affiliation: "FIAP - RM 570110"
+    affiliation: "570110"
+  - name: "Arthur Lins"
+    affiliation: "570110"
   - name: "Silvio Neto"
-    affiliation: "FIAP - RM 572632"
+    affiliation: "572632"
   - name: "Thaina Santos"
-    affiliation: "FIAP - RM 569110"
+    affiliation: "569110"
+    
 
 format:
     html:
@@ -246,30 +249,3 @@ Portanto, estes outliers não devem ser removidos antes do treinamento do KNN po
 A análise exploratória demonstra que o dataset Iris possui características ideais para o algoritmo kNN, mas exige atenção à estrutura das suas variáveis. A espécie Setosa apresenta uma separabilidade clara, garantindo alta precisão devido à sua distância em relação às demais. Já a sobreposição entre Versicolor e Virginica torna o modelo dependente de um ajuste rigoroso do hiperparâmetro k, uma vez que a fronteira de decisão será definida pela densidade local de pontos onde as médias das espécies se aproximam.
 
 Para assegurar a eficácia do modelo, é necessária a aplicação de normalização (escala) nas features, garantindo que variáveis de maior magnitude não distorçam os cálculos de proximidade. Embora a baixa variância observada favoreça a consistência do kNN, a presença de outliers na largura da sépala reforça a necessidade de um modelo robusto, capaz de ignorar ruídos pontuais para manter uma boa generalização sobre a complexidade biológica real dos dados.
-
-```{python}
-
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot
-import seaborn as sns
-
-
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
-
-df = sns.load_dataset("iris")
-print(df)
-
-```
-
-Normalizar os dados
-
-```{python}
-X = df.drop(columns="species")
-y = df["species"]
-print(X)
-print(y)
-```
