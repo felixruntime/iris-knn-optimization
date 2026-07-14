@@ -247,30 +247,6 @@ A análise exploratória demonstra que o dataset Iris possui características id
 
 Para assegurar a eficácia do modelo, é necessária a aplicação de normalização (escala) nas features, garantindo que variáveis de maior magnitude não distorçam os cálculos de proximidade. Embora a baixa variância observada favoreça a consistência do kNN, a presença de outliers na largura da sépala reforça a necessidade de um modelo robusto, capaz de ignorar ruídos pontuais para manter uma boa generalização sobre a complexidade biológica real dos dados.
 
-
-Importando scikitlearn
-
-```{r}
-#| label: setup-python
-#| include: false
-
-library(reticulate)
-
-# Força o caminho do executável do seu venv estável
-# Certifique-se de que a pasta se chama 'venv' e não 'vend'
-path_to_python <- "./venv/bin/python3.12"
-
-if (file.exists(path_to_python)) {
-  use_python(path_to_python, required = TRUE)
-}
-
-# Esse comando deve retornar a versão 3.12 ou 3.13
-py_config()
-```
-
-
-## KNN em Python
-
 ```{python}
 
 import pandas as pd

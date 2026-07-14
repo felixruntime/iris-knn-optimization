@@ -3,3 +3,5 @@
 renv/
 analysis.html
 analysis_files/
+venv
+.Renviron
